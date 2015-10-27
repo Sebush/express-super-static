@@ -3,6 +3,7 @@
 ## installation
 
 edit package.json and add this to the dependencies-object
+
     "express-super-static": "git@github.com:Sebush/express-super-static.git",
 
 ## usage
