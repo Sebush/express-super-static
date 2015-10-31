@@ -26,10 +26,13 @@ module.exports = function(options){
         var ext = req.url.split('.').pop();
         var type = 'raw';  // type: gzip, deflate, raw
         var compressable = options.compress.indexOf(ext) > -1;
-        if(compressable){
-            type = req.headers['accept-encoding'].match(/\bgzip\b/) && 'gzip' ||
-                   req.headers['accept-encoding'].match(/\bdeflate\b/) && 'deflate' ||
-                   type;
+        var acceptEncodingHeader = req.headers['accept-encoding'];
+        if(compressable && acceptEncodingHeader){
+            if(acceptEncodingHeader.match(/\bgzip\b/)){
+                type = 'gzip';
+            }else if(acceptEncodingHeader.match(/\bdeflate\b/)){
+                type = 'deflate';
+            }
         }
 
         var item = cache[type][req.url];
