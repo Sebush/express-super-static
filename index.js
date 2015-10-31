@@ -32,8 +32,8 @@ module.exports = function(options){
                    type;
         }
 
-        if(cache[type][req.url]){
-            var item = cache[type][req.url];
+        var item = cache[type][req.url];
+        if(item){
             if (req.headers['if-none-match'] === item.headers.etag) {
                 // res.header('etag', item.headers.etag);
                 // res.header('last-modified', item.headers['last-modified']);
