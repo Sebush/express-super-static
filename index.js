@@ -45,9 +45,9 @@ module.exports = function(options){
                 if(options.maxAge){
                     res.header('Cache-Control', 'public, max-age=' + options.maxAge);
                 }
-                res.header('content-type', item.headers['content-type']);
+                res.header('Content-Type', item.headers['Content-Type']);
                 if(!options.chunked){
-                    res.header('content-length', item.content.length);
+                    res.header('Content-Length', item.content.length);
                 }
                 if(options.download){
                     var file_name = req.url.split('/').pop();
@@ -97,7 +97,7 @@ var filesFromDirToDictCache = function(options, cache, startidx) {
 
                         ['gzip', 'deflate'].forEach(function(typ){
                             zlib[typ](new Buffer(cache.raw[key].content, 'utf-8'), function (err, result) {
-                                headers['content-encoding'] = 'gzip';
+                                headers['content-encoding'] = typ;
                                 cache[typ][key] = {
                                     content: result,
                                     headers: headers
