@@ -34,7 +34,7 @@ module.exports = function(options){
 
         var item = cache[type][req.url];
         if(item){
-            if (req.headers['if-none-match'] === item.headers.etag) {
+            if (req.headers['if-none-match'] && req.headers['if-none-match'] === item.headers.etag) {
                 // res.header('etag', item.headers.etag);
                 // res.header('last-modified', item.headers['last-modified']);
                 return res.status(304).end();
@@ -100,7 +100,7 @@ var filesFromDirToDictCache = function(options, cache, startidx) {
                                 headers['content-encoding'] = typ;
                                 cache[typ][key] = {
                                     content: result,
-                                    headers: headers
+                                    headers: _.extend({}, headers)
                                 };
                                 console.info('Cache-Static: [%s] (views)%s', typ, key);
                             });
