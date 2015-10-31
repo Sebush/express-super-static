@@ -37,7 +37,7 @@ module.exports = function(options){
 
         var item = cache[type][req.url];
         if(item){
-            if (req.headers['if-none-match'] && req.headers['if-none-match'] === item.headers.etag) {
+            if (req.headers['if-none-match'] && req.headers['if-none-match'] === item.headers.ETag) {
                 // res.header('etag', item.headers.etag);
                 // res.header('last-modified', item.headers['last-modified']);
                 return res.status(304).end();
@@ -85,9 +85,9 @@ var filesFromDirToDictCache = function(options, cache, startidx) {
                     var key = fullPath.substr(startidx);
 
                     var headers = {
-                        'etag': f.size + '-' + Date.parse(f.mtime),
-                        'last-modified': f.mtime,
-                        'content-type': mime.lookup(fullPath)
+                        'ETag': f.size + '-' + Date.parse(f.mtime),
+                        'Last-Modified': f.mtime,
+                        'Content-Type': mime.lookup(fullPath)
                     };
 
                     cache.raw[key] = {
@@ -100,7 +100,7 @@ var filesFromDirToDictCache = function(options, cache, startidx) {
 
                         ['gzip', 'deflate'].forEach(function(typ){
                             zlib[typ](new Buffer(cache.raw[key].content, 'utf-8'), function (err, result) {
-                                headers['content-encoding'] = typ;
+                                headers['Content-Encoding'] = typ;
                                 cache[typ][key] = {
                                     content: result,
                                     headers: _.extend({}, headers)
