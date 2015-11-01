@@ -12,7 +12,7 @@ var cache = {
     gzip: {},
     deflate: {},
 };
-var files = [];
+var _files = [];
 
 module.exports = function(options){
     options = _.extend({
@@ -25,7 +25,7 @@ module.exports = function(options){
     }, options);
     filesFromDirToDictCache(options, cache);
     return function(req, res, next){
-        if(files.indexOf(req.url) == -1){
+        if(_files.indexOf(req.url) == -1){
             return next();
         }
         var type = 'raw';  // type: gzip, deflate, raw
@@ -91,7 +91,7 @@ var filesFromDirToDictCache = function(options, cache, startidx) {
                 if(options.cache.indexOf(ext) > -1){
                     var key = fullPath.substr(startidx);
 
-                    files.push(key);
+                    _files.push(key);
 
                     var headers = {
                         'ETag': f.size + '-' + Date.parse(f.mtime),
