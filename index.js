@@ -12,6 +12,8 @@ var cache = {
     gzip: {},
     deflate: {},
 };
+var files = [];
+
 module.exports = function(options){
     options = _.extend({
         dir: 'views',
@@ -23,18 +25,23 @@ module.exports = function(options){
     }, options);
     filesFromDirToDictCache(options, cache);
     return function(req, res, next){
-        var ext = req.url.split('.').pop();
+        if(files.indexOf(req.url) == -1){
+            return next();
+        }
         var type = 'raw';  // type: gzip, deflate, raw
-        var compressable = options.compress.indexOf(ext) > -1;
+        var compressable = false;
         var acceptEncodingHeader = req.headers['accept-encoding'];
-        if(compressable && acceptEncodingHeader){
-            if(acceptEncodingHeader.match(/\bgzip\b/)){
-                type = 'gzip';
-            }else if(acceptEncodingHeader.match(/\bdeflate\b/)){
-                type = 'deflate';
+        if(acceptEncodingHeader){
+            var ext = req.url.split('.').pop();
+            compressable = options.compress.indexOf(ext) > -1;
+            if(compressable){
+                if(acceptEncodingHeader.match(/\bgzip\b/)){
+                    type = 'gzip';
+                }else if(acceptEncodingHeader.match(/\bdeflate\b/)){
+                    type = 'deflate';
+                }
             }
         }
-
         var item = cache[type][req.url];
         if(item){
             if (req.headers['if-none-match'] && req.headers['if-none-match'] === item.headers.ETag) {
@@ -83,6 +90,8 @@ var filesFromDirToDictCache = function(options, cache, startidx) {
                 ext = fullPathArr[fullPathArr.length-1];
                 if(options.cache.indexOf(ext) > -1){
                     var key = fullPath.substr(startidx);
+
+                    files.push(key);
 
                     var headers = {
                         'ETag': f.size + '-' + Date.parse(f.mtime),
