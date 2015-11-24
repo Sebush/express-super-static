@@ -19,8 +19,8 @@ module.exports = function(options){
         dir: 'views',
         maxAge: 0,
         chunked: false,
-        cache: ['js', 'css', 'txt', 'ejs', 'html', 'json', 'map', 'svg', 'jpg', 'gif', 'ico', 'png', 'woff', 'woff2', 'otf', 'ttf'],
-        compress: ['js', 'css', 'txt', 'ejs', 'html', 'json', 'map'],
+        cache: ['js', 'css', 'txt', 'ejs', 'html', 'xml', 'json', 'map', 'svg', 'jpg', 'gif', 'ico', 'png', 'woff', 'woff2', 'otf', 'ttf'],
+        compress: ['js', 'css', 'txt', 'ejs', 'html', 'xml', 'json', 'map'],
         download: false
     }, options);
     filesFromDirToDictCache(options, cache);
